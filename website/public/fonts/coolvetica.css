@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Coolvetica';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local('Coolvetica'), url('/fonts/coolvetica.woff') format('woff'), url('https://fonts.cdnfonts.com/s/13277/coolvetica.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Coolvetica';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local('Coolvetica'), url('/fonts/coolvetica.woff') format('woff'), url('https://fonts.cdnfonts.com/s/13277/coolvetica.woff') format('woff');
+}
+
+

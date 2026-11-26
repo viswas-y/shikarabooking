@@ -16,11 +16,11 @@ export default function Footer({ onNavigate }) {
   return (
     <footer className="relative bg-[#0f291e] text-white mt-16 sm:mt-24 overflow-hidden">
       
-      {/* Top Illustration Area (Kerala Paddy Fields & Village Life on Desktop, Traditional Shikara Bow on Mobile) */}
-      <div className="relative w-full h-72 xs:h-80 sm:h-auto sm:aspect-[21/9] md:h-80 lg:h-[400px] overflow-hidden">
-        {/* Top Organic Wave Transition from website sand/white background into illustration */}
+      {/* Top Illustration Area (Kerala Paddy Fields & Village Life on Desktop, Full Uncropped Shikara Bow on Mobile) */}
+      <div className="relative w-full aspect-[3/4] sm:aspect-[21/9] md:h-80 lg:h-[400px] overflow-hidden">
+        {/* Top Organic Wave Transition from website sand/white background into illustration (desktop/tablet) */}
         <svg
-          className="absolute top-0 left-0 right-0 w-full h-7 sm:h-11 md:h-14 text-[#fcfbf8] fill-current z-10 pointer-events-none"
+          className="hidden sm:block absolute top-0 left-0 right-0 w-full h-11 md:h-14 text-[#fcfbf8] fill-current z-10 pointer-events-none"
           viewBox="0 0 1440 80"
           preserveAspectRatio="none"
         >
@@ -28,10 +28,10 @@ export default function Footer({ onNavigate }) {
         </svg>
 
         {/* Soft subtle gradient behind wave for smooth sky blend */}
-        <div className="absolute top-0 left-0 right-0 h-10 sm:h-16 bg-gradient-to-b from-[#fcfbf8]/40 to-transparent z-10 pointer-events-none" />
+        <div className="hidden sm:block absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#fcfbf8]/30 to-transparent z-10 pointer-events-none" />
 
-        {/* Responsive Footer Image: Mobile (<640px) uses footer-mobile.jpg, Desktop (>=640px) uses footer-paddy-kerala.jpg */}
-        <picture className="w-full h-full">
+        {/* Responsive Footer Image: Mobile (<640px) uses full aspect-[3/4] footer-mobile.jpg uncropped, Desktop (>=640px) uses footer-paddy-kerala.jpg */}
+        <picture className="w-full h-full block">
           <source
             media="(min-width: 640px)"
             srcSet="/images/footer-paddy-kerala.jpg"
@@ -40,12 +40,12 @@ export default function Footer({ onNavigate }) {
             src="/images/footer-mobile.jpg"
             alt="Alleppey Backwaters Shikara Boat"
             loading="lazy"
-            className="w-full h-full object-cover object-center sm:object-[center_45%]"
+            className="w-full h-full object-cover object-center"
           />
         </picture>
 
-        {/* Gradient transition from green paddy fields / shikara into the deep evergreen content section below */}
-        <div className="absolute inset-x-0 bottom-0 h-24 sm:h-36 bg-gradient-to-t from-[#0f291e] via-[#0f291e]/85 to-transparent pointer-events-none" />
+        {/* Gradient transition on desktop only - on mobile, image extends fully down to the tire and water hyacinths */}
+        <div className="hidden sm:block absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0f291e] to-transparent pointer-events-none" />
       </div>
 
       {/* Main Content Area (Modelled on reference layout) */}

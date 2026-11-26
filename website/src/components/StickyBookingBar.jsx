@@ -135,13 +135,19 @@ export default function StickyBookingBar({ selectedRide, onOpenBookingWidget, on
               </div>
             </div>
 
-            {/* Mascot Character with cheerful waving tilt - FULLY VISIBLE & UNOBSTRUCTED */}
-            <div className="animate-mascot-greeting">
-              <img
-                src="/images/character.png"
-                alt="BookShikara Mascot Chikku"
-                className="w-14 sm:w-20 h-auto object-contain drop-shadow-2xl group-hover:scale-105 transition-transform select-none"
-              />
+            {/* Mascot Character Cutout with live video animation (No background) */}
+            <div className="relative group-hover:scale-105 transition-transform select-none">
+              <picture>
+                <source srcSet="/images/character-animated.webp" type="image/webp" />
+                <img
+                  src="/images/character.png"
+                  alt="BookShikara Animated Mascot"
+                  className="w-14 sm:w-20 h-auto object-contain drop-shadow-2xl select-none"
+                  width="155"
+                  height="360"
+                  loading="eager"
+                />
+              </picture>
             </div>
           </div>
 

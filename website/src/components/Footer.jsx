@@ -16,7 +16,7 @@ export default function Footer({ onNavigate }) {
   return (
     <footer className="relative text-white mt-16 sm:mt-24 overflow-hidden select-none">
       
-      {/* 1. Background Landscape Image (Responsive: Ultra-Quality Ghibli Paddy House on Mobile, Widescreen Hills on Desktop) */}
+      {/* 1. Background Landscape Image (Responsive: Aerial Canal & Palms on Mobile, Widescreen Hills on Desktop) */}
       <div className="absolute inset-0 z-0">
         <picture className="w-full h-full block">
           {/* Desktop & Tablet (>= 640px): Widescreen Rolling Hills */}
@@ -30,16 +30,16 @@ export default function Footer({ onNavigate }) {
             srcSet="/images/footer-landscape-hills.jpg"
           />
 
-          {/* Mobile (< 640px): High Quality Kerala Village Paddy Field & House */}
+          {/* Mobile (< 640px): High Quality Aerial Backwaters Canal & Palms */}
           <source
-            srcSet="/images/footer-mobile-paddy.webp"
+            srcSet="/images/footer-mobile-aerial.webp"
             type="image/webp"
           />
           <img
-            src="/images/footer-mobile-paddy.jpg"
-            alt="Kerala Village Paddy Field & Traditional House"
+            src="/images/footer-mobile-aerial.jpg"
+            alt="Alleppey Backwaters Aerial Canal & Coconut Palms"
             loading="lazy"
-            className="w-full h-full object-cover object-[center_55%] sm:object-[center_50%]"
+            className="w-full h-full object-cover object-[center_35%] sm:object-[center_50%]"
           />
         </picture>
 

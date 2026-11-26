@@ -16,20 +16,35 @@ export default function Footer({ onNavigate }) {
   return (
     <footer className="relative text-white mt-16 sm:mt-24 overflow-hidden select-none">
       
-      {/* 1. Background Landscape Image (No solid color block - Natural Photographic Landscape) */}
+      {/* 1. Background Landscape Image (Responsive: Ultra-Quality Ghibli Paddy House on Mobile, Widescreen Hills on Desktop) */}
       <div className="absolute inset-0 z-0">
         <picture className="w-full h-full block">
-          <source srcSet="/images/footer-landscape-hills.webp" type="image/webp" />
+          {/* Desktop & Tablet (>= 640px): Widescreen Rolling Hills */}
+          <source
+            media="(min-width: 640px)"
+            srcSet="/images/footer-landscape-hills.webp"
+            type="image/webp"
+          />
+          <source
+            media="(min-width: 640px)"
+            srcSet="/images/footer-landscape-hills.jpg"
+          />
+
+          {/* Mobile (< 640px): High Quality Kerala Village Paddy Field & House */}
+          <source
+            srcSet="/images/footer-mobile-paddy.webp"
+            type="image/webp"
+          />
           <img
-            src="/images/footer-landscape-hills.jpg"
-            alt="Kerala Hills & Backwaters Landscape"
+            src="/images/footer-mobile-paddy.jpg"
+            alt="Kerala Village Paddy Field & Traditional House"
             loading="lazy"
-            className="w-full h-full object-cover object-[center_65%] sm:object-[center_50%]"
+            className="w-full h-full object-cover object-[center_55%] sm:object-[center_50%]"
           />
         </picture>
 
         {/* Soft natural ambient gradient for crisp white text legibility while keeping the green landscape bright & photographic */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/30 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/35 to-black/10" />
       </div>
 
       {/* 2. Torn Paper Top Transition (Organic Ripped Paper Edge matching page sand/white background) */}

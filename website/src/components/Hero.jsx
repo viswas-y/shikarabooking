@@ -1,10 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, Phone, ShieldCheck, ChevronDown } from 'lucide-react';
 import { shikaraConfig } from '../config/shikaraConfig';
 import { resolveImageUrl } from '../api';
 
 export default function Hero({ hero }) {
   const bgImage = resolveImageUrl(hero?.backgroundImage) || '/images/hero-shikara.jpg';
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 40);
+    };
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const whatsappUrl = `https://wa.me/${shikaraConfig.whatsappNumber}?text=${encodeURIComponent(
     'Hello BookShikara! I would like to book a private Shikara ride in Alleppey. Please confirm available slots.'
@@ -23,12 +33,38 @@ export default function Hero({ hero }) {
       {/* Embedded Smooth Mouse Wheel Glide Keyframes */}
       <style>{`
         @keyframes mouseWheelGlide {
-          0% { transform: translateY(0); opacity: 1; }
-          60% { transform: translateY(8px); opacity: 0.85; }
-          100% { transform: translateY(12px); opacity: 0; }
+          0% {
+            transform: translateY(0);
+            opacity: 0;
+          }
+          20% {
+            opacity: 1;
+          }
+          60% {
+            transform: translateY(9px);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(15px);
+            opacity: 0;
+          }
         }
         .animate-wheel-glide {
           animation: mouseWheelGlide 1.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes chevronPulse {
+          0%, 100% {
+            opacity: 0.35;
+            transform: translateY(0);
+          }
+          50% {
+            opacity: 0.95;
+            transform: translateY(2.5px);
+          }
+        }
+        .animate-chevron-pulse {
+          animation: chevronPulse 1.7s ease-in-out infinite;
         }
       `}</style>
 
@@ -114,21 +150,27 @@ export default function Hero({ hero }) {
 
       </div>
 
-      {/* 6. Scroll Down Indicator - Luxury Aesthetic & Smooth Glide */}
-      <div className="relative z-10 pb-5 sm:pb-7 flex flex-col items-center justify-center select-none">
+      {/* 6. Scroll Down Indicator - Luxury Aesthetic & Disappears on Scroll */}
+      <div 
+        className={`relative z-10 pb-5 sm:pb-7 flex flex-col items-center justify-center select-none transition-all duration-500 ease-out ${
+          isScrolled 
+            ? 'opacity-0 pointer-events-none translate-y-3' 
+            : 'opacity-100 pointer-events-auto translate-y-0'
+        }`}
+      >
         <button
           type="button"
           onClick={handleScrollDown}
-          className="group flex flex-col items-center gap-1.5 cursor-pointer select-none transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-hidden"
+          className="group flex flex-col items-center gap-2 cursor-pointer select-none transition-transform duration-300 hover:scale-105 active:scale-95 focus:outline-hidden"
           aria-label="Scroll down to explore shikara rides"
         >
-          <span className="font-raleway text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-white/85 group-hover:text-white transition-colors drop-shadow-md">
+          <span className="font-sans text-[11px] font-medium tracking-[0.28em] uppercase text-white/90 group-hover:text-white transition-colors drop-shadow-md">
             Scroll Down
           </span>
-          <div className="w-5 h-8 sm:w-5.5 sm:h-9 rounded-full border-[1.5px] border-white/50 group-hover:border-white flex justify-center pt-1.5 backdrop-blur-[2px] transition-all bg-black/20 group-hover:bg-black/40 shadow-md">
-            <div className="w-1 h-2 bg-white rounded-full animate-wheel-glide" />
+          <div className="w-[22px] h-[36px] rounded-full border-[1.5px] border-white/60 group-hover:border-white/90 flex justify-center pt-1.5 backdrop-blur-xs transition-all bg-black/25 group-hover:bg-black/45 shadow-md">
+            <div className="w-[3px] h-[7px] bg-white rounded-full animate-wheel-glide" />
           </div>
-          <ChevronDown className="w-3.5 h-3.5 text-white/70 group-hover:text-emerald-400 -mt-0.5 transition-colors animate-pulse" />
+          <ChevronDown className="w-3.5 h-3.5 text-white/60 group-hover:text-emerald-400 -mt-0.5 transition-colors animate-chevron-pulse" />
         </button>
       </div>
 

@@ -25,11 +25,10 @@ import PolicyPages from './pages/PolicyPages';
 import RideDetailPage from './pages/RideDetailPage';
 
 import { shikaraConfig } from './config/shikaraConfig';
-import { fetchContent } from './api';
+import { fetchContent, FALLBACK_CONTENT } from './api';
 
 export default function App() {
-  const [content, setContent] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [content, setContent] = useState(FALLBACK_CONTENT);
   const [currentPath, setCurrentPath] = useState(window.location.pathname || '/');
   const [selectedDuration, setSelectedDuration] = useState(3); // 3h default
 
@@ -37,11 +36,9 @@ export default function App() {
     async function loadData() {
       try {
         const data = await fetchContent();
-        setContent(data);
+        if (data) setContent(data);
       } catch (err) {
         console.error('Failed to load content:', err);
-      } finally {
-        setLoading(false);
       }
     }
     loadData();
@@ -77,16 +74,6 @@ export default function App() {
       if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center text-white">
-        <div className="w-12 h-12 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <h2 className="font-sans text-2xl font-bold tracking-tight text-white">{shikaraConfig.brandName}</h2>
-        <p className="text-xs text-slate-400 uppercase tracking-widest mt-1">Gliding onto Alleppey Backwaters...</p>
-      </div>
-    );
-  }
 
   // Render supporting page if matched
   const renderPage = () => {

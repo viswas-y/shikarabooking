@@ -4,7 +4,7 @@ import { Anchor, Compass, Eye, ShieldCheck, Sun, Trees } from 'lucide-react';
 export default function ExperienceSection() {
   return (
     <section id="experience" className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-[1360px] mx-auto scroll-mt-20">
-      
+
       {/* Short & Clean Section Header */}
       <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
         <div className="inline-block px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/80 text-[10px] sm:text-[11px] font-bold tracking-[0.2em] text-[#163b2f] uppercase mb-2">
@@ -20,7 +20,7 @@ export default function ExperienceSection() {
 
       {/* Grid: 2 Main Cards (What is a Shikara + What You Experience) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
-        
+
         {/* Card 1: What is a Shikara */}
         <div className="bg-white rounded-3xl p-7 sm:p-9 shadow-card border border-slate-200/90 flex flex-col justify-between">
           <div>

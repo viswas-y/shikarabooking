@@ -7,7 +7,7 @@ export default function WhyChooseUs() {
 
   return (
     <section id="why-us" className="py-8 sm:py-12 px-4 sm:px-6 lg:px-8 max-w-[1360px] mx-auto scroll-mt-20">
-      
+
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto mb-6 sm:mb-8">
         <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 text-[11px] font-bold tracking-[0.2em] text-slate-500 uppercase mb-4">

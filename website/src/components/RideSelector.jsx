@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { Star, ArrowUpRight, Lock, UserCheck, Fuel, LifeBuoy } from 'lucide-react';
 import { shikaraConfig } from '../config/shikaraConfig';
 
 export default function RideSelector({ onSelectDuration, onNavigate }) {
@@ -88,7 +88,7 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
           Choose Your Cruise
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 font-normal mt-1.5 max-w-md mx-auto leading-relaxed">
-          Private Shikara rides from 2 to 5 hours. Tap any card to explore full route stops &amp; booking.
+          Private Shikara rides from 2 to 4 hours. Tap any card to explore full route stops &amp; booking.
         </p>
       </div>
 
@@ -127,14 +127,19 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
 
       {/* =========================================================================
           STAGE: CENTER-STAGE CAROUSEL WITH LEFT & RIGHT PEEKING CARDS
-          Modelled on the user reference video:
-          - Active card in center (scale 1.0, opacity 1.0, z-index 20)
-          - Left card peeking (scale 0.85, opacity 0.45, z-index 10)
-          - Right card peeking (scale 0.85, opacity 0.45, z-index 10)
-          - Two-tone split card: photo top half, clean white bottom with stats
+          Modelled on the user reference card (media_1795659981574_24818916.png):
+          - Full-bleed Shikara boat photo background with top rounded corners
+          - Top floating badges: [🔒 Private] and [⭐ 4.9]
+          - Bottom floating dark green sheet (#1a3d33) with full details:
+            • Category / Boat name ("Royal Backwater Shikara")
+            • Title ("4 Hours Cruise")
+            • "Up to 6 guests included"
+            • 3 Feature pills: Captain, Fuel, Life jackets
+            • Price ("₹4,000 / ride") & per person ("about ₹667 per person")
+            • White pill button: "Book now ↗"
           ========================================================================= */}
       <div 
-        className="relative w-full max-w-5xl mx-auto h-[445px] xs:h-[465px] sm:h-[495px] flex items-center justify-center overflow-visible"
+        className="relative w-full max-w-5xl mx-auto h-[470px] xs:h-[490px] sm:h-[520px] flex items-center justify-center overflow-visible"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -177,9 +182,13 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
           }
 
           if (!isVisible && opacity === 0) {
-            // keep non-adjacent cards invisible
             return null;
           }
+
+          const perPersonRate = Math.round(ride.basePrice / (shikaraConfig.pricing?.baseGuestLimit || 6));
+          const displayName = ride.boatName
+            ? (ride.boatName.toLowerCase().includes('shikara') ? ride.boatName : `${ride.boatName} Shikara`)
+            : 'Royal Backwater Shikara';
 
           return (
             <div
@@ -192,54 +201,87 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
                 filter: filter,
                 transition: 'transform 550ms cubic-bezier(0.25, 1, 0.5, 1), opacity 550ms ease, filter 550ms ease',
               }}
-              className={`absolute w-[285px] xs:w-[310px] sm:w-[340px] md:w-[360px] h-[440px] xs:h-[460px] sm:h-[490px] rounded-[28px] sm:rounded-[32px] overflow-hidden shadow-2xl cursor-pointer flex flex-col justify-between bg-white border border-slate-200/80 transition-shadow duration-300 ${
-                isCenter ? 'ring-2 sm:ring-3 ring-[#163b2f]/30 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.35)]' : 'hover:opacity-75'
+              className={`absolute w-[295px] xs:w-[320px] sm:w-[350px] md:w-[370px] h-[465px] xs:h-[485px] sm:h-[515px] rounded-[28px] sm:rounded-[32px] overflow-hidden shadow-2xl cursor-pointer flex flex-col justify-between bg-slate-950 transition-shadow duration-300 ${
+                isCenter ? 'ring-2 sm:ring-3 ring-emerald-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)]' : 'hover:opacity-75'
               }`}
             >
               
-              {/* =========================================================================
-                  FIRST MODEL CARD DESIGN (media_1795618062988_a67556bc.png):
-                  - TOP (~45%): Clean white card info
-                    • Hours ("3 Hours Cruise") + Top rated badge
-                    • "Up to 6 guests included"
-                    • Rate ("₹3,000 / ride") + "Book Now ↗" button
-                  - BOTTOM (~55%): Boat photo with rounded inner corners
-                    • Boat name pill badge
-                    • "★ 4.9" Review rating pill badge
-                  - Strictly no clutter. Rest of details seen on tap / Book Now.
-                  ========================================================================= */}
-              
-              {/* TOP PORTION (~45%): White Header Info */}
-              <div className="w-full h-[45%] p-4 sm:p-5 flex flex-col justify-between bg-white select-none">
-                
-                {/* Row 1: Duration Title + Top Rated Badge */}
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="font-extrabold text-slate-900 font-sans tracking-tight text-xl sm:text-2xl leading-none">
-                      {ride.durationLabel} Cruise
-                    </h3>
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold border border-slate-200 text-slate-600 bg-slate-50/80">
-                      {ride.isPopular ? 'Top rated' : 'Private'}
-                    </span>
-                  </div>
+              {/* 1. Full-Bleed Boat Photo Background */}
+              <img
+                src={ride.imageUrl}
+                alt={ride.name}
+                loading={isCenter ? 'eager' : 'lazy'}
+                className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none transition-transform duration-700 hover:scale-105"
+              />
 
-                  {/* Row 2: Guests info (Upto 6 guest) */}
-                  <p className="text-xs sm:text-[13px] text-slate-500 font-medium mt-1.5 leading-snug">
-                    Up to 6 guests included
-                  </p>
+              {/* Gradient overlay for contrast: subtle dark at top, clear center, smooth dark at bottom */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/75 pointer-events-none" />
+
+              {/* 2. Top Floating Badges: [🔒 Private] and [⭐ 4.9] */}
+              <div className="relative z-10 p-3.5 sm:p-4 flex items-center justify-between select-none pointer-events-none">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/65 backdrop-blur-md text-white text-xs font-semibold border border-white/15 shadow-sm">
+                  <Lock className="w-3.5 h-3.5 text-white/90" />
+                  <span>Private</span>
                 </div>
 
-                {/* Row 3: Rate & Book Now Button */}
-                <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-100/80">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/65 backdrop-blur-md text-white text-xs font-semibold border border-white/15 shadow-sm">
+                  <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                  <span>{ride.rating || '4.9'}</span>
+                </div>
+              </div>
+
+              {/* 3. Center Area shows the Boat photo unobstructed */}
+              <div className="flex-grow pointer-events-none" />
+
+              {/* 4. Bottom Floating Dark Forest Green Details Card matching media_1795659981574_24818916.png */}
+              <div className="relative z-10 m-2.5 sm:m-3 p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] bg-[#1a3d33]/95 backdrop-blur-md border border-white/15 shadow-2xl text-white flex flex-col justify-between select-none">
+                <div>
+                  {/* Category / Boat Name */}
+                  <div className="text-emerald-300/90 text-xs sm:text-[13px] font-medium tracking-wide">
+                    {displayName}
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight mt-0.5">
+                    {ride.durationLabel} Cruise
+                  </h3>
+
+                  {/* Subtitle */}
+                  <p className="text-xs sm:text-[13px] text-slate-300 font-normal mt-0.5 mb-3">
+                    Up to 6 guests included
+                  </p>
+
+                  {/* 3 Pills: Captain, Fuel, Life jackets */}
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3.5 sm:mb-4">
+                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
+                      <UserCheck className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
+                      <span>Captain</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
+                      <Fuel className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
+                      <span>Fuel</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
+                      <LifeBuoy className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
+                      <span>Life jackets</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Bottom Row: Price & Book Now Button */}
+                <div className="flex items-center justify-between gap-3 pt-2 sm:pt-2.5 border-t border-white/10">
                   <div>
                     <div className="flex items-baseline gap-1">
-                      <span className="text-xl sm:text-2xl font-black text-slate-950 font-sans tracking-tight leading-none">
+                      <span className="text-2xl sm:text-[27px] font-black text-white font-sans tracking-tight leading-none">
                         ₹{ride.basePrice.toLocaleString('en-IN')}
                       </span>
-                      <span className="text-[11px] text-slate-400 font-semibold lowercase">
+                      <span className="text-xs sm:text-sm text-slate-300/80 font-normal">
                         / ride
                       </span>
                     </div>
+                    <p className="text-[10px] sm:text-xs text-slate-300/80 font-normal mt-1 leading-none">
+                      about ₹{perPersonRate.toLocaleString('en-IN')} per person
+                    </p>
                   </div>
 
                   <button
@@ -248,40 +290,11 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
                       e.stopPropagation();
                       handleCardClick(ride, true);
                     }}
-                    className="inline-flex items-center justify-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-bold bg-slate-950 hover:bg-[#163b2f] text-white shadow-md transition-all transform active:scale-95 cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer flex-shrink-0"
                   >
-                    <span>Book Now</span>
-                    <ArrowUpRight className="w-4 h-4 text-white" />
+                    <span>Book now</span>
+                    <ArrowUpRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
                   </button>
-                </div>
-
-              </div>
-
-              {/* BOTTOM PORTION (~55%): Photo Container with Rounded Inner Corners */}
-              <div className="w-full h-[55%] p-2 sm:p-2.5 pt-0">
-                <div className="relative w-full h-full rounded-[20px] sm:rounded-[24px] overflow-hidden bg-slate-950 shadow-inner">
-                  <img
-                    src={ride.imageUrl}
-                    alt={ride.name}
-                    loading={isCenter ? 'eager' : 'lazy'}
-                    className="w-full h-full object-cover transition-transform duration-700 pointer-events-none group-hover:scale-105"
-                  />
-
-                  {/* Subtle dark gradient overlay on bottom of photo */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/20 pointer-events-none" />
-
-                  {/* Bottom Row on Photo: Boat Name & 4.9 Rating Badge */}
-                  <div className="absolute bottom-2.5 inset-x-2.5 sm:bottom-3 sm:inset-x-3 flex items-center justify-between gap-2 pointer-events-none">
-                    <span className="px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-md text-white font-bold text-[11px] border border-white/20 shadow-xs truncate max-w-[170px]">
-                      {ride.boatName || 'Private Shikara'}
-                    </span>
-
-                    <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/55 backdrop-blur-md text-white text-[11px] font-bold border border-white/20 shadow-xs flex-shrink-0">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>{ride.rating || '4.9'}</span>
-                    </div>
-                  </div>
-
                 </div>
               </div>
 

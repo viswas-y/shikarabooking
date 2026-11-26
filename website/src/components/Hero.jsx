@@ -1,5 +1,5 @@
 import React from 'react';
-import { Star, Phone, ShieldCheck } from 'lucide-react';
+import { Star, Phone, ShieldCheck, ChevronDown } from 'lucide-react';
 import { shikaraConfig } from '../config/shikaraConfig';
 import { resolveImageUrl } from '../api';
 
@@ -10,8 +10,27 @@ export default function Hero({ hero }) {
     'Hello BookShikara! I would like to book a private Shikara ride in Alleppey. Please confirm available slots.'
   )}`;
 
+  const handleScrollDown = () => {
+    const ridesSection = document.getElementById('rides');
+    if (ridesSection) {
+      ridesSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section id="hero" className="relative min-h-[100svh] sm:min-h-screen h-[100svh] sm:h-screen w-full flex flex-col justify-between overflow-hidden bg-slate-950 text-white">
+
+      {/* Embedded Smooth Mouse Wheel Glide Keyframes */}
+      <style>{`
+        @keyframes mouseWheelGlide {
+          0% { transform: translateY(0); opacity: 1; }
+          60% { transform: translateY(8px); opacity: 0.85; }
+          100% { transform: translateY(12px); opacity: 0; }
+        }
+        .animate-wheel-glide {
+          animation: mouseWheelGlide 1.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+      `}</style>
 
       {/* Responsive Background Images (No green arch, clear photo visibility):
           - Mobile View (< 640px): hero-mobile.jpg
@@ -36,10 +55,10 @@ export default function Hero({ hero }) {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.35)_100%)] pointer-events-none" />
 
       {/* Subtle bottom fade */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/65 to-transparent pointer-events-none" />
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
 
       {/* Center Hero Content matching Wanderway template layout & typography */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-44 sm:pt-48 md:pt-56 pb-20 sm:pb-28 flex-grow flex flex-col items-center justify-center text-center">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 sm:pt-36 md:pt-44 pb-4 sm:pb-8 flex-grow flex flex-col items-center justify-center text-center">
 
         {/* 1. Label with flanking lines matching Wanderway template */}
         <div className="flex items-center justify-center gap-3 sm:gap-4 mb-3 sm:mb-4 select-none">
@@ -93,6 +112,24 @@ export default function Hero({ hero }) {
           <span>Pay ₹1,000 advance to hold boat • Balance at jetty</span>
         </p>
 
+      </div>
+
+      {/* 6. Scroll Down Indicator - Luxury Aesthetic & Smooth Glide */}
+      <div className="relative z-10 pb-5 sm:pb-7 flex flex-col items-center justify-center select-none">
+        <button
+          type="button"
+          onClick={handleScrollDown}
+          className="group flex flex-col items-center gap-1.5 cursor-pointer select-none transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-hidden"
+          aria-label="Scroll down to explore shikara rides"
+        >
+          <span className="font-raleway text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase text-white/85 group-hover:text-white transition-colors drop-shadow-md">
+            Scroll Down
+          </span>
+          <div className="w-5 h-8 sm:w-5.5 sm:h-9 rounded-full border-[1.5px] border-white/50 group-hover:border-white flex justify-center pt-1.5 backdrop-blur-[2px] transition-all bg-black/20 group-hover:bg-black/40 shadow-md">
+            <div className="w-1 h-2 bg-white rounded-full animate-wheel-glide" />
+          </div>
+          <ChevronDown className="w-3.5 h-3.5 text-white/70 group-hover:text-emerald-400 -mt-0.5 transition-colors animate-pulse" />
+        </button>
       </div>
 
     </section>

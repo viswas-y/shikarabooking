@@ -23,6 +23,19 @@ export default function RideDetailPage({ initialDuration = 3, onNavigate }) {
     setPhotoIndex(0);
   }, [duration]);
 
+  // Preload all boat photos immediately on component mount for instant switching
+  useEffect(() => {
+    const allUrls = shikaraConfig.rides.flatMap((r) =>
+      (r.boatPhotos || []).map((p) => p.url).concat(r.imageUrl)
+    );
+    allUrls.forEach((url) => {
+      if (url) {
+        const img = new Image();
+        img.src = url;
+      }
+    });
+  }, []);
+
   const ride = shikaraConfig.rides.find((r) => r.durationHours === duration) || shikaraConfig.rides[1];
   const calculation = calculateRidePrice(duration, guestCount);
   const selectedTime = shikaraConfig.timeSlots.find(t => t.id === selectedTimeId) || shikaraConfig.timeSlots[3];
@@ -116,13 +129,21 @@ export default function RideDetailPage({ initialDuration = 3, onNavigate }) {
           ========================================================================= */}
       <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-950 aspect-[16/10] sm:aspect-[21/9] max-h-[420px] shadow-card border border-slate-200/90 mb-5 group select-none">
         
-        {/* Main Photo */}
-        <img
-          src={currentPhoto.url}
-          alt={currentPhoto.title || ride.name}
-          className="w-full h-full object-cover transition-all duration-300 cursor-pointer"
-          onClick={() => setLightboxPhoto(currentPhoto)}
-        />
+        {/* Pre-mounted stacked photos for instant 0ms slide switching */}
+        {photos.map((photo, idx) => (
+          <img
+            key={photo.url || idx}
+            src={photo.url}
+            alt={photo.title || ride.name}
+            loading="eager"
+            decoding="async"
+            fetchPriority={idx === 0 ? 'high' : 'auto'}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 cursor-pointer ${
+              idx === photoIndex ? 'opacity-100 z-0' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+            onClick={() => setLightboxPhoto(photo)}
+          />
+        ))}
 
         {/* Prev & Next In-Frame Arrows (Only if more than 1 photo) */}
         {photos.length > 1 && (

@@ -9,42 +9,26 @@ import { resolveImageUrl } from '../api';
 export const CURVED_CAROUSEL_CONFIG = {
   // Motion Timings
   autoplayInterval: 2800, // Auto-advance every 2.8s
-  transitionDuration: 900, // 0.9s smooth interpolation
-  transitionEase: 'cubic-bezier(0.65, 0, 0.35, 1)', // Smooth curved glide ease
+  transitionDuration: 850, // 0.85s smooth interpolation
+  transitionEase: 'cubic-bezier(0.25, 1, 0.5, 1)', // Snappy yet ultra-smooth ease
   resumeDelayAfterInteraction: 2000, // Resume autoplay 2s after user interaction
 
-  // Mobile parameters (< 768px)
+  // Mobile parameters (< 768px): Matches desktop 5-card curved arc
   mobile: {
-    perspective: 900, // 900px 3D perspective
-    centerWidthVw: 62, // Center photo ~62vw wide
-    maxCenterWidthPx: 300,
+    perspective: 1000,
+    centerWidthVw: 58,
+    maxCenterWidthPx: 240,
     aspectRatio: '3 / 4',
-    gapPx: 10, // ~10px thin gap between panels
-    sideRotationY: 55, // Rotated 55 degrees around Y-axis
-    sideScale: 0.85, // Scaled 0.85
-    sideBlurPx: 2, // Blurred 2px
-    sideOpacity: 0.7, // 0.7 opacity on peek
-    stageHeight: '70svh', // Stage height ~70svh on mobile
+    stageHeight: '360px',
   },
 
   // Desktop parameters (>= 768px)
   desktop: {
-    perspective: 1400, // 1400px 3D perspective
-    centerWidthVw: 22, // Center photo ~22vw wide
-    maxCenterWidthPx: 340, // Max 340px width
+    perspective: 1400,
+    centerWidthVw: 22,
+    maxCenterWidthPx: 340,
     aspectRatio: '3 / 4',
-    gapPx: 16, // ~16px gap between panels
-    // Immediate side photos (offset -1 and +1)
-    sideRotationY: 40, // Rotated ~40 degrees around Y-axis
-    sideScale: 0.9, // Scaled 0.9
-    sideBlurPx: 1, // Blurred 1px
-    sideOpacity: 0.85,
-    // Outer side peeking photos (offset -2 and +2)
-    outerRotationY: 55,
-    outerScale: 0.8,
-    outerBlurPx: 2,
-    outerOpacity: 0.45,
-    stageHeight: '520px', // Stage height 520px on desktop
+    stageHeight: '520px',
   },
 };
 
@@ -339,33 +323,47 @@ export default function Gallery({ gallery }) {
             let isClickable = false;
 
             if (isMobile) {
-              // --- MOBILE (under 768px) ---
+              // --- MOBILE (under 768px): Matches desktop 5-card curved arc ---
               if (offset === 0) {
-                // Center photo: flat, 62vw wide, 3/4 ratio, sharp
+                // Center photo: flat, prominent, scale 1, sharp
                 transform = 'translate3d(0, 0, 0px) rotateY(0deg) scale(1)';
                 filter = 'blur(0px)';
                 opacity = 1;
                 zIndex = 30;
                 isClickable = true;
               } else if (offset === -1) {
-                // Left peek: rotated +55deg, scale 0.85, blur 2px, opacity 0.7
-                transform = 'translate3d(calc(-100% - 10px), 0, -75px) rotateY(55deg) scale(0.85)';
-                filter = 'blur(2px)';
-                opacity = 0.7;
-                zIndex = 20;
+                // Immediate left card: gentle 22deg angle, sharp, clearly visible
+                transform = 'translate3d(calc(-82% - 10px), 0, -40px) rotateY(22deg) scale(0.92)';
+                filter = 'blur(0px)';
+                opacity = 0.92;
+                zIndex = 25;
                 isClickable = true;
               } else if (offset === 1) {
-                // Right peek: rotated -55deg, scale 0.85, blur 2px, opacity 0.7
-                transform = 'translate3d(calc(100% + 10px), 0, -75px) rotateY(-55deg) scale(0.85)';
-                filter = 'blur(2px)';
-                opacity = 0.7;
-                zIndex = 20;
+                // Immediate right card: gentle -22deg angle, sharp, clearly visible
+                transform = 'translate3d(calc(82% + 10px), 0, -40px) rotateY(-22deg) scale(0.92)';
+                filter = 'blur(0px)';
+                opacity = 0.92;
+                zIndex = 25;
+                isClickable = true;
+              } else if (offset === -2) {
+                // Outer left peek: visible entering the 3D curve
+                transform = 'translate3d(calc(-156% - 16px), 0, -90px) rotateY(36deg) scale(0.82)';
+                filter = 'blur(0.5px)';
+                opacity = 0.45;
+                zIndex = 15;
+                isClickable = true;
+              } else if (offset === 2) {
+                // Outer right peek: visible entering the 3D curve
+                transform = 'translate3d(calc(156% + 16px), 0, -90px) rotateY(-36deg) scale(0.82)';
+                filter = 'blur(0.5px)';
+                opacity = 0.45;
+                zIndex = 15;
                 isClickable = true;
               } else {
-                // Photos 2 steps away are hidden
+                // Photos in rear of 3D cylinder
                 const dir = offset > 0 ? 1 : -1;
-                transform = `translate3d(${dir * 160}%, 0, -180px) rotateY(${dir * -65}deg) scale(0.7)`;
-                filter = 'blur(3px)';
+                transform = `translate3d(${dir * 220}%, 0, -160px) rotateY(${dir * -55}deg) scale(0.7)`;
+                filter = 'blur(2px)';
                 opacity = 0;
                 zIndex = 0;
               }
@@ -426,13 +424,15 @@ export default function Gallery({ gallery }) {
                   filter,
                   opacity,
                   zIndex,
-                  width: isMobile ? 'min(62vw, 300px)' : 'min(22vw, 340px)',
+                  width: isMobile ? 'min(58vw, 240px)' : 'min(22vw, 340px)',
                   aspectRatio: '3 / 4',
                   transition: prefersReducedMotion 
                     ? 'none' 
                     : `transform ${CURVED_CAROUSEL_CONFIG.transitionDuration}ms ${CURVED_CAROUSEL_CONFIG.transitionEase}, opacity ${CURVED_CAROUSEL_CONFIG.transitionDuration}ms ${CURVED_CAROUSEL_CONFIG.transitionEase}, filter ${CURVED_CAROUSEL_CONFIG.transitionDuration}ms ${CURVED_CAROUSEL_CONFIG.transitionEase}`,
                   willChange: 'transform, opacity, filter',
                   pointerEvents: isClickable ? 'auto' : 'none',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden',
                 }}
                 className={`absolute rounded-[20px] sm:rounded-[24px] overflow-hidden bg-slate-900 border border-slate-200/80 shadow-2xl ${
                   isClickable ? 'cursor-pointer' : ''
@@ -455,9 +455,9 @@ export default function Gallery({ gallery }) {
       </div>
 
       {/* =========================================================================
-          CONTROLS: SMALL PREV/NEXT ARROW BUTTONS (HIDDEN ON MOBILE, VISIBLE ON DESKTOP)
+          CONTROLS: PREV/NEXT ARROW BUTTONS + PROGRESS DOTS (VISIBLE ON ALL SCREENS)
           ========================================================================= */}
-      <div className="hidden md:flex items-center justify-center gap-3 mt-6">
+      <div className="flex items-center justify-center gap-2.5 sm:gap-3 mt-4 sm:mt-6 px-4">
         <button
           type="button"
           onClick={() => {
@@ -465,11 +465,30 @@ export default function Gallery({ gallery }) {
             goToPrev();
             scheduleResume();
           }}
-          className="w-10 h-10 rounded-full bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#163b2f]/40"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer focus:outline-hidden"
           aria-label="Previous photo"
         >
-          <ChevronLeft className="w-5 h-5 text-slate-700" />
+          <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5 text-slate-700" />
         </button>
+
+        {/* Progress dots indicating slide position */}
+        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100 border border-slate-200/60 shadow-2xs">
+          {photos.slice(0, Math.min(photos.length, 6)).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              onClick={() => {
+                pauseAutoPlay();
+                setCurrentIndex(i);
+                scheduleResume();
+              }}
+              className={`h-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                (currentIndex % 6) === i ? 'w-5 bg-[#163b2f]' : 'w-1.5 bg-slate-300 hover:bg-slate-400'
+              }`}
+              aria-label={`Go to slide ${i + 1}`}
+            />
+          ))}
+        </div>
 
         <button
           type="button"
@@ -478,10 +497,10 @@ export default function Gallery({ gallery }) {
             goToNext();
             scheduleResume();
           }}
-          className="w-10 h-10 rounded-full bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#163b2f]/40"
+          className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white hover:bg-slate-100 text-slate-800 border border-slate-200/90 shadow-xs flex items-center justify-center transition-all hover:scale-105 active:scale-95 cursor-pointer focus:outline-hidden"
           aria-label="Next photo"
         >
-          <ChevronRight className="w-5 h-5 text-slate-700" />
+          <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-700" />
         </button>
       </div>
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Star, ArrowUpRight, Lock, UserCheck, Fuel, LifeBuoy } from 'lucide-react';
+import { Star, ArrowUpRight } from 'lucide-react';
 import { shikaraConfig } from '../config/shikaraConfig';
 
 export default function RideSelector({ onSelectDuration, onNavigate }) {
@@ -127,19 +127,15 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
 
       {/* =========================================================================
           STAGE: CENTER-STAGE CAROUSEL WITH LEFT & RIGHT PEEKING CARDS
-          Modelled on the user reference card (media_1795659981574_24818916.png):
-          - Full-bleed Shikara boat photo background with top rounded corners
-          - Top floating badges: [🔒 Private] and [⭐ 4.9]
-          - Bottom floating dark green sheet (#1a3d33) with full details:
-            • Category / Boat name ("Royal Backwater Shikara")
-            • Title ("4 Hours Cruise")
-            • "Up to 6 guests included"
-            • 3 Feature pills: Captain, Fuel, Life jackets
-            • Price ("₹4,000 / ride") & per person ("about ₹667 per person")
-            • White pill button: "Book now ↗"
+          Modelled on the user reference card (media_1795661509920_da082ae0.jpg):
+          - Full-bleed Shikara boat photo background with rounded corners
+          - Top-Left: Duration Title ("2 Hour Ride", "3 Hour Ride", "4 Hour Ride")
+          - Below Title: "PRIVATE" / "POPULAR" badge (replacing "BEST RATED")
+          - Top-Right: "★ 4.9" Rating badge
+          - Bottom: Single white pill button with Rate on left & "Book now ↗" on right
           ========================================================================= */}
       <div 
-        className="relative w-full max-w-5xl mx-auto h-[470px] xs:h-[490px] sm:h-[520px] flex items-center justify-center overflow-visible"
+        className="relative w-full max-w-5xl mx-auto h-[445px] xs:h-[465px] sm:h-[495px] flex items-center justify-center overflow-visible"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
@@ -185,11 +181,6 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
             return null;
           }
 
-          const perPersonRate = Math.round(ride.basePrice / (shikaraConfig.pricing?.baseGuestLimit || 6));
-          const displayName = ride.boatName
-            ? (ride.boatName.toLowerCase().includes('shikara') ? ride.boatName : `${ride.boatName} Shikara`)
-            : 'Royal Backwater Shikara';
-
           return (
             <div
               key={ride.id}
@@ -201,8 +192,8 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
                 filter: filter,
                 transition: 'transform 550ms cubic-bezier(0.25, 1, 0.5, 1), opacity 550ms ease, filter 550ms ease',
               }}
-              className={`absolute w-[295px] xs:w-[320px] sm:w-[350px] md:w-[370px] h-[465px] xs:h-[485px] sm:h-[515px] rounded-[28px] sm:rounded-[32px] overflow-hidden shadow-2xl cursor-pointer flex flex-col justify-between bg-slate-950 transition-shadow duration-300 ${
-                isCenter ? 'ring-2 sm:ring-3 ring-emerald-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.45)]' : 'hover:opacity-75'
+              className={`absolute w-[290px] xs:w-[315px] sm:w-[340px] md:w-[360px] h-[440px] xs:h-[460px] sm:h-[490px] rounded-[28px] sm:rounded-[32px] overflow-hidden shadow-2xl cursor-pointer flex flex-col justify-between bg-slate-950 transition-shadow duration-300 ${
+                isCenter ? 'ring-2 sm:ring-3 ring-emerald-500/40 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.5)]' : 'hover:opacity-75'
               }`}
             >
               
@@ -214,88 +205,59 @@ export default function RideSelector({ onSelectDuration, onNavigate }) {
                 className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none transition-transform duration-700 hover:scale-105"
               />
 
-              {/* Gradient overlay for contrast: subtle dark at top, clear center, smooth dark at bottom */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/75 pointer-events-none" />
+              {/* Gradient overlay for contrast: dark at top, clear center, smooth dark at bottom */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/65 via-black/15 to-black/70 pointer-events-none" />
 
-              {/* 2. Top Floating Badges: [🔒 Private] and [⭐ 4.9] */}
-              <div className="relative z-10 p-3.5 sm:p-4 flex items-center justify-between select-none pointer-events-none">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/65 backdrop-blur-md text-white text-xs font-semibold border border-white/15 shadow-sm">
-                  <Lock className="w-3.5 h-3.5 text-white/90" />
-                  <span>Private</span>
+              {/* 2. Top Portion: Left Title & Badge, Right 4.9 Rating */}
+              <div className="relative z-10 p-5 sm:p-6 flex items-start justify-between w-full select-none pointer-events-none">
+                
+                {/* Left: Duration Title + Private Badge */}
+                <div>
+                  <h3 className="font-baskerville font-normal text-2xl sm:text-3xl text-white tracking-tight leading-none drop-shadow-lg">
+                    {ride.durationHours} Hour Ride
+                  </h3>
+                  <div className="mt-2.5 inline-flex items-center px-2.5 py-0.5 rounded-md bg-black/45 backdrop-blur-md border border-white/20 text-[10px] sm:text-[11px] font-bold tracking-[0.18em] uppercase text-white/90 shadow-sm">
+                    {ride.isPopular ? 'POPULAR' : 'PRIVATE'}
+                  </div>
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-950/65 backdrop-blur-md text-white text-xs font-semibold border border-white/15 shadow-sm">
+                {/* Right: 4.9 Star Rating Badge */}
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur-md border border-white/20 text-xs font-bold text-white shadow-sm flex-shrink-0">
                   <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                   <span>{ride.rating || '4.9'}</span>
                 </div>
+
               </div>
 
               {/* 3. Center Area shows the Boat photo unobstructed */}
               <div className="flex-grow pointer-events-none" />
 
-              {/* 4. Bottom Floating Dark Forest Green Details Card matching media_1795659981574_24818916.png */}
-              <div className="relative z-10 m-2.5 sm:m-3 p-4 sm:p-5 rounded-[22px] sm:rounded-[24px] bg-[#1a3d33]/95 backdrop-blur-md border border-white/15 shadow-2xl text-white flex flex-col justify-between select-none">
-                <div>
-                  {/* Category / Boat Name */}
-                  <div className="text-emerald-300/90 text-xs sm:text-[13px] font-medium tracking-wide">
-                    {displayName}
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-tight mt-0.5">
-                    {ride.durationLabel} Cruise
-                  </h3>
-
-                  {/* Subtitle */}
-                  <p className="text-xs sm:text-[13px] text-slate-300 font-normal mt-0.5 mb-3">
-                    Up to 6 guests included
-                  </p>
-
-                  {/* 3 Pills: Captain, Fuel, Life jackets */}
-                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-3.5 sm:mb-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
-                      <UserCheck className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
-                      <span>Captain</span>
+              {/* 4. Bottom Portion: Single Pill Button with Rate on Left & Book Now on Right */}
+              <div className="relative z-10 p-4 sm:p-5 w-full select-none">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCardClick(ride, true);
+                  }}
+                  className="w-full flex items-center justify-between px-4 sm:px-5 py-3 sm:py-3.5 rounded-full bg-white/95 hover:bg-white text-slate-900 shadow-xl shadow-black/25 backdrop-blur-md transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] cursor-pointer group/btn"
+                >
+                  {/* Left Side: Rate */}
+                  <div className="flex items-baseline gap-1 text-left">
+                    <span className="text-base sm:text-lg font-black tracking-tight font-sans text-slate-950">
+                      ₹{ride.basePrice.toLocaleString('en-IN')}
                     </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
-                      <Fuel className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
-                      <span>Fuel</span>
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-full bg-white/10 text-white/95 text-[11px] sm:text-xs font-medium border border-white/10 backdrop-blur-xs">
-                      <LifeBuoy className="w-3.5 h-3.5 text-emerald-300 flex-shrink-0" />
-                      <span>Life jackets</span>
+                    <span className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                      / ride
                     </span>
                   </div>
-                </div>
 
-                {/* Bottom Row: Price & Book Now Button */}
-                <div className="flex items-center justify-between gap-3 pt-2 sm:pt-2.5 border-t border-white/10">
-                  <div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-2xl sm:text-[27px] font-black text-white font-sans tracking-tight leading-none">
-                        ₹{ride.basePrice.toLocaleString('en-IN')}
-                      </span>
-                      <span className="text-xs sm:text-sm text-slate-300/80 font-normal">
-                        / ride
-                      </span>
-                    </div>
-                    <p className="text-[10px] sm:text-xs text-slate-300/80 font-normal mt-1 leading-none">
-                      about ₹{perPersonRate.toLocaleString('en-IN')} per person
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleCardClick(ride, true);
-                    }}
-                    className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2.5 rounded-full bg-white hover:bg-slate-100 text-slate-950 font-bold text-xs sm:text-sm shadow-md transition-all hover:scale-105 active:scale-95 cursor-pointer flex-shrink-0"
-                  >
+                  {/* Right Side: Book now */}
+                  <div className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-slate-900 group-hover/btn:text-emerald-700 transition-colors">
                     <span>Book now</span>
-                    <ArrowUpRight className="w-4 h-4 text-slate-950 stroke-[2.5]" />
-                  </button>
-                </div>
+                    <ArrowUpRight className="w-4 h-4 stroke-[2.5] text-slate-900 group-hover/btn:text-emerald-700 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
+                  </div>
+                </button>
               </div>
 
             </div>

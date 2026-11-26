@@ -14,42 +14,36 @@ export default function Footer({ onNavigate }) {
   };
 
   return (
-    <footer className="relative bg-[#0f291e] text-white mt-16 sm:mt-24 overflow-hidden">
+    <footer className="relative text-white mt-16 sm:mt-24 overflow-hidden bg-[#071c14]">
       
-      {/* Top Illustration Area (Kerala Paddy Fields & Village Life on Desktop, Full Uncropped Shikara Bow on Mobile) */}
-      <div className="relative w-full aspect-[3/4] sm:aspect-[21/9] md:h-80 lg:h-[400px] overflow-hidden">
-        {/* Top Organic Wave Transition from website sand/white background into illustration (desktop/tablet) */}
-        <svg
-          className="hidden sm:block absolute top-0 left-0 right-0 w-full h-11 md:h-14 text-[#fcfbf8] fill-current z-10 pointer-events-none"
-          viewBox="0 0 1440 80"
-          preserveAspectRatio="none"
-        >
-          <path d="M0,0 L1440,0 L1440,25 C1200,60 1040,15 720,40 C440,70 240,15 0,45 Z" />
-        </svg>
-
-        {/* Soft subtle gradient behind wave for smooth sky blend */}
-        <div className="hidden sm:block absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-[#fcfbf8]/30 to-transparent z-10 pointer-events-none" />
-
-        {/* Responsive Footer Image: Mobile (<640px) uses full aspect-[3/4] footer-mobile.jpg uncropped, Desktop (>=640px) uses footer-paddy-kerala.jpg */}
+      {/* Background Image: Kerala Paddy Fields, House & Misty Mountains (Inside the footer section) */}
+      <div className="absolute inset-0 z-0">
         <picture className="w-full h-full block">
-          <source
-            media="(min-width: 640px)"
-            srcSet="/images/footer-paddy-kerala.jpg"
-          />
+          <source srcSet="/images/footer-kerala-paddy.webp" type="image/webp" />
           <img
-            src="/images/footer-mobile.jpg"
-            alt="Alleppey Backwaters Shikara Boat"
+            src="/images/footer-kerala-paddy.jpg"
+            alt="Kerala Paddy Fields & Misty Mountains"
             loading="lazy"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-[center_35%]"
           />
         </picture>
 
-        {/* Gradient transition on desktop only - on mobile, image extends fully down to the tire and water hyacinths */}
-        <div className="hidden sm:block absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0f291e] to-transparent pointer-events-none" />
+        {/* Evergreen overlay & gradient for rich contrast and perfect text readability */}
+        <div className="absolute inset-0 bg-[#071c14]/80 sm:bg-[#071c14]/75" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#04120c] via-[#071c14]/70 to-[#071c14]/85" />
       </div>
 
+      {/* Top Wave Transition from website sand/white background into footer */}
+      <svg
+        className="absolute top-0 left-0 right-0 w-full h-6 sm:h-10 text-[#fcfbf8] fill-current z-10 pointer-events-none"
+        viewBox="0 0 1440 80"
+        preserveAspectRatio="none"
+      >
+        <path d="M0,0 L1440,0 L1440,25 C1200,60 1040,15 720,40 C440,70 240,15 0,45 Z" />
+      </svg>
+
       {/* Main Content Area (Modelled on reference layout) */}
-      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 pt-2 sm:pt-4 pb-20 sm:pb-12">
+      <div className="relative z-10 max-w-[1360px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 pb-20 sm:pb-12">
         
         {/* Upper Grid: 3 Link Columns + Circular Icons + Brand Contact Block */}
         <div className="grid grid-cols-2 md:grid-cols-12 gap-8 lg:gap-10 pb-10 sm:pb-14">

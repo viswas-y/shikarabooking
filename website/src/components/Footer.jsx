@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, MessageCircle, ArrowUpRight, Compass, ShieldCheck } from 'lucide-react';
+import { Phone, Mail, ArrowUpRight, ShieldCheck } from 'lucide-react';
 import { shikaraConfig } from '../config/shikaraConfig';
 
 export default function Footer({ onNavigate }) {
@@ -69,11 +69,8 @@ export default function Footer({ onNavigate }) {
           {/* Left Column: Brand Logo, Tagline & Direct Contact Actions */}
           <div className="lg:col-span-5 space-y-4">
             
-            {/* Logo Emblem + Brand Name */}
+            {/* Brand Name Only (Logo Icon removed as requested) */}
             <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-white/20 backdrop-blur-md border border-white/40 flex items-center justify-center text-white shadow-md">
-                <Compass className="w-5 h-5 text-emerald-200" />
-              </div>
               <span className="text-2xl sm:text-3xl font-black font-sans tracking-tight text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.6)]">
                 {shikaraConfig.brandName}
               </span>
@@ -87,31 +84,36 @@ export default function Footer({ onNavigate }) {
               Authentic private Shikara boat cruises through Alleppey backwaters. Transparent pricing, verified local captains, and instant jetty boarding.
             </p>
 
-            {/* Direct Contact Buttons */}
+            {/* Direct Contact Buttons: Solid White Button Boxes with Proper Icons */}
             <div className="flex flex-wrap items-center gap-2.5 pt-1">
+              {/* WhatsApp Button (White Box with Official WhatsApp Icon) */}
               <a
                 href={`https://wa.me/${whatsapp}?text=Hello%20BookShikara,%20I%20would%20like%20to%20book%20a%20private%20shikara%20ride.`}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white hover:text-slate-900 border border-white/40 backdrop-blur-md text-xs font-bold text-white transition-all transform hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-900 text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
               >
-                <MessageCircle className="w-3.5 h-3.5 fill-current text-emerald-300" />
+                <svg viewBox="0 0 24 24" className="w-4 h-4 fill-[#25D366] flex-shrink-0" aria-hidden="true">
+                  <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.41a8.16 8.16 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.42 0-2.81-.37-4.04-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.15 8.15 0 0 1-1.25-4.47c0-4.54 3.7-8.25 8.24-8.25zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.5-1.4-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08s.89 2.41 1.01 2.58c.13.17 1.75 2.67 4.24 3.75.59.26 1.05.41 1.41.53.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.68-1.18.21-.59.21-1.09.15-1.19-.06-.1-.23-.17-.48-.29z" />
+                </svg>
                 <span>WhatsApp</span>
               </a>
 
+              {/* Phone Call Button (White Box) */}
               <a
                 href={`tel:${shikaraConfig.phoneNumberClean}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white hover:text-slate-900 border border-white/40 backdrop-blur-md text-xs font-bold text-white transition-all transform hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-900 text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
               >
-                <Phone className="w-3.5 h-3.5 fill-current text-amber-300" />
+                <Phone className="w-4 h-4 fill-amber-500 text-amber-500 flex-shrink-0" />
                 <span>{phone}</span>
               </a>
 
+              {/* Email Button (White Box) */}
               <a
                 href={`mailto:${email}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/15 hover:bg-white hover:text-slate-900 border border-white/40 backdrop-blur-md text-xs font-bold text-white transition-all transform hover:scale-105 shadow-sm"
+                className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 rounded-full bg-white hover:bg-slate-100 text-slate-900 text-xs sm:text-sm font-extrabold shadow-md hover:shadow-lg transition-all transform hover:scale-105 active:scale-95"
               >
-                <Mail className="w-3.5 h-3.5 text-sky-300" />
+                <Mail className="w-4 h-4 text-sky-600 flex-shrink-0" />
                 <span>Email</span>
               </a>
             </div>
